@@ -1,4 +1,4 @@
-package poa
+package democraticvalset
 
 import (
 	sdk "github.com/cosmos/cosmos-sdk/types"

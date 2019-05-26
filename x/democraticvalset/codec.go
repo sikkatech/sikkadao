@@ -1,4 +1,4 @@
-package poa
+package democraticvalset
 
 import (
 	"github.com/cosmos/cosmos-sdk/codec"

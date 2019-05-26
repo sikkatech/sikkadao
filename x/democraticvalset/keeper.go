@@ -1,4 +1,4 @@
-package poa
+package democraticvalset
 
 import (
 	"github.com/cosmos/cosmos-sdk/codec"
@@ -27,8 +27,6 @@ type Keeper struct {
 	codespace sdk.CodespaceType
 }
 
-func (keeper Keeper) UpdateValidator(ctx.)
-
 func (keeper Keeper) SetValidator(ctx sdk.Context, validator Validator) {
 	store := ctx.KVStore(keeper.storeKey)
 	bz := keeper.cdc.MustMarshalBinaryBare(Validator)
@@ -49,7 +47,7 @@ func (keeper Keeper) RemoveValidator(ctx sdk.Context, operAddr sdk.ValAddress) {
 	tStore.Set(val.ConsPubKey, []byte(0))
 }
 
-func (keeper Keeper) UpdateValidatorPower(ctx sdk.Context, operAddr sdk.ValAddress, newPower int64) (sdk.Error) {
+func (keeper Keeper) UpdateValidatorPower(ctx sdk.Context, operAddr sdk.ValAddress, newPower int64) sdk.Error {
 	store := ctx.KVStore(keeper.storeKey)
 	bz := store.Get(operAddr)
 	if bz == nil {
@@ -62,7 +60,7 @@ func (keeper Keeper) UpdateValidatorPower(ctx sdk.Context, operAddr sdk.ValAddre
 	keeper.SetValidator(ctx, val)
 }
 
-func (keeper Keeper) UpdateValidatorConsPubKey(ctx sdk.Context, operAddr sdk.ValAddress, newConsPubKey sdk.ConsPubKey)  (sdk.Error) {
+func (keeper Keeper) UpdateValidatorConsPubKey(ctx sdk.Context, operAddr sdk.ValAddress, newConsPubKey sdk.ConsPubKey) sdk.Error {
 	store := ctx.KVStore(keeper.storeKey)
 	bz := store.Get(operAddr)
 	if bz == nil {
@@ -90,4 +88,3 @@ func (keeper Keeper) UpdateValidatorDescription(ctx sdk.Context, operAddr sdk.Va
 
 	keeper.SetValidator(ctx, val)
 }
-

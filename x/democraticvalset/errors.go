@@ -1,5 +1,5 @@
 //nolint
-package poa
+package democraticvalset
 
 import (
 	"fmt"
@@ -8,7 +8,7 @@ import (
 )
 
 const (
-	DefaultCodespace sdk.CodespaceType = "poa"
+	DefaultCodespace sdk.CodespaceType = "democraticvalset"
 
 	CodeNonexistantValidator sdk.CodeType = 1
 	CodeInvalidDelegation    sdk.CodeType = 2
@@ -23,6 +23,11 @@ func ErrNonexistantValidator(codespace sdk.CodespaceType, valAddress sdk.ValAddr
 //validator
 func ErrNilValidatorAddr(codespace sdk.CodespaceType) sdk.Error {
 	return sdk.NewError(codespace, CodeInvalidInput, "validator address is nil")
+}
+
+//validator
+func ErrInvalidValidatorConsPubKey(codespace sdk.CodespaceType) sdk.Error {
+	return sdk.NewError(codespace, CodeInvalidInput, "validator cons pubkey is invalid")
 }
 
 func ErrDescriptionLength(codespace sdk.CodespaceType, descriptor string, got, max int) sdk.Error {

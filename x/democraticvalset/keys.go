@@ -1,8 +1,8 @@
-package poa
+package democraticvalset
 
 const (
-	// ModuleName is the name of the staking module
-	ModuleName = "poa"
+	// ModuleName is the name of this staking module
+	ModuleName = "democraticvalset"
 
 	// StoreKey is the string store representation
 	StoreKey = ModuleName

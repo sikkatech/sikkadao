@@ -1,4 +1,4 @@
-package poa
+package democraticvalset
 
 import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -6,11 +6,11 @@ import (
 )
 
 
-// Handle all "poa" type messages.
+// Handle all "democraticvalset" type messages.
 func NewHandler(keeper Keeper) sdk.Handler {
 	return func(ctx sdk.Context, msg sdk.Msg) sdk.Result {
 		switch msg := msg.(type) {
-		case MsgDeposit:
+		case MsgUpdateDescription:
 			return handleMsgDeposit(ctx, keeper, msg)
 		case MsgSubmitProposal:
 			return handleMsgSubmitProposal(ctx, keeper, msg)
