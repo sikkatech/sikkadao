@@ -18,7 +18,7 @@ func NewHandler(keeper Keeper) sdk.Handler {
 			return handleMsgVote(ctx, keeper, msg)
 
 		default:
-			errMsg := fmt.Sprintf("unrecognized gov message type: %T", msg)
+			errMsg := fmt.Sprintf("unrecognized %s message type: %T", RouterKey, msg)
 			return sdk.ErrUnknownRequest(errMsg).Result()
 		}
 	}

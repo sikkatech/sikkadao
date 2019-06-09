@@ -27,6 +27,17 @@ type Keeper struct {
 	codespace sdk.CodespaceType
 }
 
+func (keeper Keeper) GetValidator(ctx sdk.Context, operatorAddress sdk.AccAddress) (Validator, sdk.Error) {
+	store := ctx.KVStore(keeper.storeKey)
+	bz := store.Get(validator.OperatorAddress)
+	if bz == nil {
+		return Validator, ErrNonexistantValidator(DefaultCodespace, operAddr)
+	}
+	var val Validator
+	keeper.cdc.MustUnmarshalBinaryBare(bz, &val)
+	return val
+}
+
 func (keeper Keeper) SetValidator(ctx sdk.Context, validator Validator) {
 	store := ctx.KVStore(keeper.storeKey)
 	bz := keeper.cdc.MustMarshalBinaryBare(Validator)
@@ -36,55 +47,53 @@ func (keeper Keeper) SetValidator(ctx sdk.Context, validator Validator) {
 	tStore.Set(validator.ConsPubKey, []byte(validator.Power))
 }
 
-func (keeper Keeper) RemoveValidator(ctx sdk.Context, operAddr sdk.ValAddress) {
+func (keeper Keeper) RemoveValidator(ctx sdk.Context, operAddr sdk.ValAddress) sdk.Error {
 	store := ctx.KVStore(keeper.storeKey)
 	bz := store.Get(operAddr)
+	if bz == nil {
+		return ErrNonexistantValidator(DefaultCodespace, operAddr)
+	}
 	var val Validator
 	keeper.cdc.MustUnmarshalBinaryBare(bz, &val)
 	store.Delete(operAddr)
 
 	tStore := ctx.TransientStore(keeper.transientStoreKey)
 	tStore.Set(val.ConsPubKey, []byte(0))
+	return nil
 }
 
 func (keeper Keeper) UpdateValidatorPower(ctx sdk.Context, operAddr sdk.ValAddress, newPower int64) sdk.Error {
-	store := ctx.KVStore(keeper.storeKey)
-	bz := store.Get(operAddr)
-	if bz == nil {
-		return ErrNonexistantValidator(DefaultCodespace, operAddr)
+	val, err := keeper.GetValidator(ctx, operAddr)
+	if err != nil {
+		return err
 	}
-	var val Validator
-	keeper.cdc.MustUnmarshalBinaryBare(bz, &val)
 	val.Power = newPower
-
 	keeper.SetValidator(ctx, val)
 }
 
 func (keeper Keeper) UpdateValidatorConsPubKey(ctx sdk.Context, operAddr sdk.ValAddress, newConsPubKey sdk.ConsPubKey) sdk.Error {
-	store := ctx.KVStore(keeper.storeKey)
-	bz := store.Get(operAddr)
-	if bz == nil {
-		return ErrNonexistantValidator(DefaultCodespace, operAddr)
+	val, err := keeper.GetValidator(ctx, operAddr)
+	if err != nil {
+		return err
 	}
-	var val Validator
-	keeper.cdc.MustUnmarshalBinaryBare(bz, &val)
 	val.ConsPubKey = newConsPubKey
-
 	keeper.SetValidator(ctx, val)
 }
 
 func (keeper Keeper) UpdateValidatorDescription(ctx sdk.Context, operAddr sdk.ValAddress, updateDescription Description) {
-	store := ctx.KVStore(keeper.storeKey)
-	bz := store.Get(operAddr)
-	if bz == nil {
-		return ErrNonexistantValidator(DefaultCodespace, operAddr)
+	val, err := keeper.GetValidator(ctx, operAddr)
+	if err != nil {
+		return err
 	}
-	var val Validator
-	keeper.cdc.MustUnmarshalBinaryBare(bz, &val)
 	newDescription, err := val.Description.UpdateDescription(updateDescription)
 	if err != nil {
 		return err
 	}
-
+	val.Description = newDescription
 	keeper.SetValidator(ctx, val)
+}
+
+func (keeper Keeper) ValidatorIterator(ctx sdk.Context) sdk.Iterator {
+	store := ctx.KVStore(keeper.storeKey)
+	return store.Iterator(nil, nil)
 }

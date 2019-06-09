@@ -9,8 +9,6 @@ import (
 
 // Constants pertaining to a Content object
 const (
-	ProposalRoute = "democraticvalset"
-
 	AddValidatorType = "add_validator"
 	UpdateValidatorPowerType = "update_validator"
 	RemoveValidatorType = "remove_validator"

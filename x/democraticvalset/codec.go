@@ -4,9 +4,10 @@ import (
 	"github.com/cosmos/cosmos-sdk/codec"
 )
 
-// Register concrete types on codec codec
+// Register concrete types on codec
 func RegisterCodec(cdc *codec.Codec) {
-	cdc.RegisterConcrete(MsgCreateValidator{}, "cosmos-sdk/MsgUpdateDescription", nil)
+	cdc.RegisterConcrete(MsgUpdateDescription{}, "cosmos-sdk/MsgUpdateDescription", nil)
+	cdc.RegisterConcrete(MsgUpdateConsPubKey{}, "cosmos-sdk/MsgUpdateConsPubKey", nil)
 }
 
 // generic sealed codec to be used throughout this module

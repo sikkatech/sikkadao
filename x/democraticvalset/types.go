@@ -13,6 +13,24 @@ type Validator struct {
 	Power           int64          `json:"power"`
 }
 
+func (val Validator) Equals(val2 Validator) bool {
+	if val.OperatorAddress.Equals(val2.OperatorAddress) &&
+		val.ConsPubKey.Equals(val2.ConsPubKey) &&
+		val.Description.Equals(val2.Description) &&
+		val.Power == val2.Power {
+		return true
+	}
+	return false
+}
+
+func EmptyValidator() Validator {
+	return Validator{}
+}
+
+func (val Validator) IsEmpty() bool {
+	return val.Equals(EmptyValidator())
+}
+
 // nolint
 const (
 	// TODO: Why can't we just have one string description which can be JSON by convention
@@ -83,4 +101,14 @@ func (d Description) EnsureLength() (Description, sdk.Error) {
 	}
 
 	return d, nil
+}
+
+func (d Description) Equals(d2 Description) bool {
+	if d.Moniker.Equals(d2.Moniker) &&
+		d.Identity.Equals(d2.Identity) &&
+		d.Website.Equals(d2.Website) &&
+		d.Details.Equals(d2.Details) {
+		return true
+	}
+	return false
 }
